@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>DaData IP → City</title>
+
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+  <script src="ajax_rest.js"></script>
+</head>
+
+<body>
+  <form action="" method="POST">
+    <strong>Укажите IP <span class="mf-req">*</span></strong><br>
+    <input type="text" name="ip" id="ip" value="" placeholder="Например: 46.226.227.20"><br><br>
+
+    <input type="submit" name="submit" id="submit" value="Отправить">
+  </form>
+
+  <div id="result" style="margin-top:16px;"></div>
+</body>
+</html>
