@@ -1,49 +1,29 @@
 $(document).ready(function () {
   $("form").submit(function (event) {
-    event.preventDefault(); // главное: не перезагружать страницу
+    event.preventDefault();
 
     var ip = $("#ip").val().trim();
 
-    if (!ip) {
-      $("#result").html("<p style='color:red'>Введите IP</p>");
-      return;
-    }
-
-    // Endpoint DaData для определения города по IP
-    var url = "https://suggestions.dadata.ru/suggestions/api/4_1/rs/iplocate/address?ip=";
-
-    // ВСТАВЬ СЮДА СВОЙ API-КЛЮЧ (НЕ секретный)
-    var token = "ВСТАВЬ_СЮДА_API_КЛЮЧ";
+    // 1) URL ipLocate
+    var url = "https://suggestions.dadata.ru/suggestions/api/4_1/rs/iplocate/address";
+    var token = "1a5ae4130c80c93f82bf066fdd39d0d67e25f34a"; // API-ключ
 
     $.ajax({
       type: "GET",
-      url: url + encodeURIComponent(ip),
+      url: url,
+      data: { ip: ip },
       beforeSend: function (xhr) {
-        xhr.setRequestHeader("Accept", "application/json");
         xhr.setRequestHeader("Authorization", "Token " + token);
       },
       dataType: "json",
-      encode: true,
     }).done(function (result) {
-      // Требование ДЗ: вывести result в консоль
       console.log(result);
 
-      // Достаем город из ответа
-      // Обычно есть location.data.city или location.data.city_with_type
-      var city = "";
-      if (result && result.location && result.location.data) {
-        city = result.location.data.city_with_type || result.location.data.city || "";
-      }
-
-      if (!city) {
-        $("#result").html("<p>Город не определён (или IP не российский)</p>");
-        return;
-      }
-
+      var city = result?.location?.data?.city || "Город не найден";
       $("#result").html("<p><b>Город:</b> " + city + "</p>");
     }).fail(function (xhr) {
-      console.log("Ошибка", xhr.status, xhr.responseText);
-      $("#result").html("<p style='color:red'>Ошибка запроса. Проверь API-ключ и IP.</p>");
+      console.log("Ошибка:", xhr.status, xhr.responseText);
+      $("#result").html("<p style='color:red'>Ошибка запроса. Проверь токен и IP.</p>");
     });
   });
 });
